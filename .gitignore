@@ -1,0 +1,11 @@
+__pycache__
+build
+cropped_dataset/ImageSets
+cropped_dataset/pc_data
+cropped_dataset/testing
+cropped_dataset/training
+cropped_dataset/validation
+data_object_calib
+predictions
+kitti_eval/evaluate_object_3d_offline
+.DS_Store
