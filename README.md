@@ -3,8 +3,8 @@
 This is an unofficial inplementation of [VoxelNet: End-to-End Learning for Point Cloud Based 3D Object Detection](https://arxiv.org/abs/1711.06396) in TensorFlow. A large part of this project is based on the work [here](https://github.com/jeasinema/VoxelNet-tensorflow). Thanks to [@jeasinema](https://github.com/jeasinema). This work is a modified version with bugs fixed and better experimental settings to chase the results reported in the paper (still ongoing).
 
 # Dependencies
-- `python3.5+`
-- `TensorFlow` (tested on 1.4.1)
+- `python3.6+`
+- `TensorFlow 2.0` 
 - `opencv`
 - `shapely`
 - `numba`
@@ -12,19 +12,27 @@ This is an unofficial inplementation of [VoxelNet: End-to-End Learning for Point
 
 # Installation
 1. Clone this repository.
-2. Compile the Cython module
-```bash
-$ python3 setup.py build_ext --inplace
+
+2. Install the dependencies
 ```
-3. Compile the evaluation code
-```bash
-$ cd kitti_eval
-$ g++ -o evaluate_object_3d_offline evaluate_object_3d_offline.cpp
+pip3 install -r requirements.txt
 ```
-4. grant the execution permission to evaluation script
-```bash
-$ cd kitti_eval
-$ chmod +x launch_test.sh
+
+3. Compile the Cython module
+```
+python3 setup.py build_ext --inplace
+```
+
+4. Compile the evaluation code
+```
+cd kitti_eval
+g++ -std=C++14 -o evaluate_object_3d_offline evaluate_object_3d_offline.cpp
+```
+
+5. Grant the execution permission to evaluation script
+```
+cd kitti_eval
+chmod +x launch_test.sh
 ```
 
 # Data Preparation
@@ -34,9 +42,14 @@ $ chmod +x launch_test.sh
     * Camera calibration matrices of object data set (16 MB): for visualization of predictions
     * Left color images of object data set (12 GB): for visualization of predictions
 
-2. In this project, we use the cropped point cloud data for training and validation. Point clouds outside the image coordinates are removed. Update the directories in `data/crop.py` and run `data/crop.py` to generate cropped data. Note that cropped point cloud data will overwrite raw point cloud data.
+2. After downloading the 4 folders mentioned above, we will use `data.crop.py` to get the cropped point cloud data for training and validation. Point clouds outside the image coordinates will be removed. To do so, update the directories on `lines 82 - 85` in `data/crop.py` and run `data/crop.py` to generate the cropped data. Note that cropped point cloud data will overwrite raw point cloud data.
 
-2. Split the training set into training and validation set according to the protocol [here](https://xiaozhichen.github.io/files/mv3d/imagesets.tar.gz). And rearrange the folders to have the following structure:
+```
+cd data
+python crop.py
+```
+
+3. Split the training set into training and validation set according to the protocol [here](https://xiaozhichen.github.io/files/mv3d/imagesets.tar.gz). And rearrange the folders to have the following structure:
 ```plain
 └── DATA_DIR
        ├── training   <-- training data
@@ -49,7 +62,7 @@ $ chmod +x launch_test.sh
        |   └── velodyne
 ```
         
-3. Update the dataset directory in `config.py` and `kitti_eval/launch_test.sh`
+4. Update the dataset directory in `config.py` and `kitti_eval/launch_test.sh`
 
 # Train
 1. Specify the GPUs to use in `config.py`
@@ -77,8 +90,8 @@ $ python3 test.py
 results will be dumped into `predictions/data`. Set the `--vis` flag to True if dumping visualizations and they will be saved into `predictions/vis`.
 
 2. run the following command to measure quantitative performances of predictions:
-```bash
-$ ./kitti_eval/evaluate_object_3d_offline [DATA_DIR]/validation/label_2 ./predictions
+```
+./kitti_eval/evaluate_object_3d_offline [DATA_DIR]/validation/label_2 ./predictions
 ```
 
 # Performances
