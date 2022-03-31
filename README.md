@@ -26,7 +26,7 @@ python3 setup.py build_ext --inplace
 4. Compile the evaluation code
 ```
 cd kitti_eval
-g++ -std=C++14 -o evaluate_object_3d_offline evaluate_object_3d_offline.cpp
+g++ -std=c++14 -o evaluate_object_3d_offline evaluate_object_3d_offline.cpp
 ```
 
 5. Grant the execution permission to evaluation script
@@ -51,7 +51,7 @@ python crop.py
 
 3. Split the training set into training and validation set according to the protocol [here](https://xiaozhichen.github.io/files/mv3d/imagesets.tar.gz). And rearrange the folders to have the following structure:
 ```plain
-└── DATA_DIR
+└── cropped_dataset
        ├── training   <-- training data
        |   ├── image_2
        |   ├── label_2
@@ -85,7 +85,7 @@ $ python3 parse_log.py predictions
 # Evaluate
 1. run `test.py -n default` to produce final predictions on the validation set after training is done. Change `-n` flag to `pre_trained_car` will start testing for the pre-trained model (only car model provided for now).
 ```bash
-$ python3 test.py
+$ python3 test.py -n pre_trained_car -b 1
 ```
 results will be dumped into `predictions/data`. Set the `--vis` flag to True if dumping visualizations and they will be saved into `predictions/vis`.
 
