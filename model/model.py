@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:UTF-8 -*-
 
-
+import time
 import sys
 import os
 import tensorflow as tf
@@ -274,6 +274,8 @@ class RPN3D(object):
             batch_gt_boxes3d = label_to_gt_box3d(
                 label, cls=self.cls, coordinate='lidar')
         print('predict', tag)
+        t1 = time.time()
+                
         input_feed = {}
         input_feed[self.is_train] = False
         for idx in range(len(self.avail_gpus)):
@@ -289,6 +291,10 @@ class RPN3D(object):
         batch_boxes2d = batch_boxes3d[:, :, [0, 1, 4, 5, 6]]
         batch_probs = probs.reshape(
             (len(self.avail_gpus) * self.single_batch_size, -1))
+
+        t2 = time.time()
+        print('\tDone testing the {}th sample, time: {:.1f}ms, speed {:.2f}FPS'.format(tag, (t2 - t1) * 1000, 1 / (t2 - t1)))
+        
         # NMS
         ret_box3d = []
         ret_score = []
