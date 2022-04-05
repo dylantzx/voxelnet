@@ -295,6 +295,9 @@ class RPN3D(object):
         t2 = time.time()
         print('\tDone testing the {}th sample, time: {:.1f}ms, speed {:.2f}FPS'.format(tag, (t2 - t1) * 1000, 1 / (t2 - t1)))
         
+        with open("fps.txt", "a") as f:
+            f.write(f"{1 / (t2 - t1):.2f}\n")
+
         # NMS
         ret_box3d = []
         ret_score = []
